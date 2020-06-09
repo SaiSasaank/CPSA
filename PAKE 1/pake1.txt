@@ -1,0 +1,100 @@
+(herald "PAKE 1" (algebra diffie-hellman))
+
+(comment "CPSA 3.6.2")
+(comment "All input read from pake1.scm")
+
+(defprotocol pake1 diffie-hellman
+  (defrole init
+    (vars (P Q name) (m data) (a rndx) (p skey) (v base))
+    (trace (send (exp (gen) a)) (recv v)
+      (send (enc m (hash p P Q (exp (gen) a) v (exp v a))))))
+  (defrole resp
+    (vars (d data) (b rndx) (u base))
+    (trace (recv u) (send (exp (gen) b)) (recv d))))
+
+(defskeleton pake1
+  (vars (m data) (P Q name) (p skey) (v base) (a rndx))
+  (defstrand init 3 (m m) (P P) (Q Q) (p p) (v v) (a a))
+  (deflistener (hash p P Q (exp (gen) a) v (exp v a)))
+  (pen-non-orig p)
+  (uniq-orig m)
+  (traces
+    ((send (exp (gen) a)) (recv v)
+      (send (enc m (hash p P Q (exp (gen) a) v (exp v a)))))
+    ((recv (hash p P Q (exp (gen) a) v (exp v a)))
+      (send (hash p P Q (exp (gen) a) v (exp v a)))))
+  (label 0)
+  (unrealized (1 0))
+  (origs (m (0 2)))
+  (comment "1 in cohort - 1 not yet seen"))
+
+(defskeleton pake1
+  (vars (m data) (P Q name) (p skey) (v base) (a rndx))
+  (defstrand init 3 (m m) (P P) (Q Q) (p p) (v v) (a a))
+  (deflistener (hash p P Q (exp (gen) a) v (exp v a)))
+  (deflistener (cat p P Q (exp (gen) a) v (exp v a)))
+  (precedes ((2 1) (1 0)))
+  (pen-non-orig p)
+  (uniq-orig m)
+  (operation encryption-test
+    (added-listener (cat p P Q (exp (gen) a) v (exp v a)))
+    (hash p P Q (exp (gen) a) v (exp v a)) (1 0))
+  (traces
+    ((send (exp (gen) a)) (recv v)
+      (send (enc m (hash p P Q (exp (gen) a) v (exp v a)))))
+    ((recv (hash p P Q (exp (gen) a) v (exp v a)))
+      (send (hash p P Q (exp (gen) a) v (exp v a))))
+    ((recv (cat p P Q (exp (gen) a) v (exp v a)))
+      (send (cat p P Q (exp (gen) a) v (exp v a)))))
+  (label 1)
+  (parent 0)
+  (unrealized (2 0))
+  (dead)
+  (comment "empty cohort"))
+
+(comment "Nothing left to do")
+
+(defprotocol pake1 diffie-hellman
+  (defrole init
+    (vars (P Q name) (m data) (a rndx) (p skey) (v base))
+    (trace (send (exp (gen) a)) (recv v)
+      (send (enc m (hash p P Q (exp (gen) a) v (exp v a))))))
+  (defrole resp
+    (vars (d data) (b rndx) (u base))
+    (trace (recv u) (send (exp (gen) b)) (recv d))))
+
+(defskeleton pake1
+  (vars (d data) (P Q name) (p skey) (u v base) (a b rndx))
+  (defstrand resp 3 (d d) (u u) (b b))
+  (deflistener (hash p P Q (exp (gen) a) v (exp v a)))
+  (pen-non-orig p)
+  (traces ((recv u) (send (exp (gen) b)) (recv d))
+    ((recv (hash p P Q (exp (gen) a) v (exp v a)))
+      (send (hash p P Q (exp (gen) a) v (exp v a)))))
+  (label 2)
+  (unrealized (1 0))
+  (origs)
+  (comment "1 in cohort - 1 not yet seen"))
+
+(defskeleton pake1
+  (vars (d data) (P Q name) (p skey) (u v base) (a b rndx))
+  (defstrand resp 3 (d d) (u u) (b b))
+  (deflistener (hash p P Q (exp (gen) a) v (exp v a)))
+  (deflistener (cat p P Q (exp (gen) a) v (exp v a)))
+  (precedes ((2 1) (1 0)))
+  (pen-non-orig p)
+  (operation encryption-test
+    (added-listener (cat p P Q (exp (gen) a) v (exp v a)))
+    (hash p P Q (exp (gen) a) v (exp v a)) (1 0))
+  (traces ((recv u) (send (exp (gen) b)) (recv d))
+    ((recv (hash p P Q (exp (gen) a) v (exp v a)))
+      (send (hash p P Q (exp (gen) a) v (exp v a))))
+    ((recv (cat p P Q (exp (gen) a) v (exp v a)))
+      (send (cat p P Q (exp (gen) a) v (exp v a)))))
+  (label 3)
+  (parent 2)
+  (unrealized (2 0))
+  (dead)
+  (comment "empty cohort"))
+
+(comment "Nothing left to do")

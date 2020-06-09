@@ -1,0 +1,514 @@
+(herald "Apple i-Message")
+
+(comment "CPSA 3.6.2")
+(comment "All input read from i-Message.scm")
+
+(defprotocol ns basic
+  (defrole init
+    (vars (a b name) (m text) (k skey))
+    (trace
+      (send
+        (cat (enc k (pubk b)) (enc m k)
+          (enc (enc k (pubk b)) (enc m k) (privk a))
+          (hash (enc k (pubk b)) (enc m k)
+            (enc (enc k (pubk b)) (enc m k) (privk a)))
+          (enc
+            (hash (enc k (pubk b)) (enc m k)
+              (enc (enc k (pubk b)) (enc m k) (privk a))) k)))))
+  (defrole response
+    (vars (a b name) (m text) (k skey))
+    (trace
+      (recv
+        (cat (enc k (pubk b)) (enc m k)
+          (enc (enc k (pubk b)) (enc m k) (privk a))
+          (hash (enc k (pubk b)) (enc m k)
+            (enc (enc k (pubk b)) (enc m k) (privk a)))
+          (enc
+            (hash (enc k (pubk b)) (enc m k)
+              (enc (enc k (pubk b)) (enc m k) (privk a))) k))))))
+
+(defskeleton ns
+  (vars (m text) (a b name) (k skey))
+  (defstrand init 1 (m m) (a a) (b b) (k k))
+  (deflistener (enc m k))
+  (deflistener (enc k (pubk b)))
+  (non-orig (privk a) (privk b))
+  (uniq-orig k)
+  (traces
+    ((send
+       (cat (enc k (pubk b)) (enc m k)
+         (enc (enc k (pubk b)) (enc m k) (privk a))
+         (hash (enc k (pubk b)) (enc m k)
+           (enc (enc k (pubk b)) (enc m k) (privk a)))
+         (enc
+           (hash (enc k (pubk b)) (enc m k)
+             (enc (enc k (pubk b)) (enc m k) (privk a))) k))))
+    ((recv (enc m k)) (send (enc m k)))
+    ((recv (enc k (pubk b))) (send (enc k (pubk b)))))
+  (label 0)
+  (unrealized (1 0) (2 0))
+  (preskeleton)
+  (origs (k (0 0)))
+  (comment "Not a skeleton"))
+
+(defskeleton ns
+  (vars (m text) (a b name) (k skey))
+  (defstrand init 1 (m m) (a a) (b b) (k k))
+  (deflistener (enc m k))
+  (deflistener (enc k (pubk b)))
+  (precedes ((0 0) (2 0)))
+  (non-orig (privk a) (privk b))
+  (uniq-orig k)
+  (traces
+    ((send
+       (cat (enc k (pubk b)) (enc m k)
+         (enc (enc k (pubk b)) (enc m k) (privk a))
+         (hash (enc k (pubk b)) (enc m k)
+           (enc (enc k (pubk b)) (enc m k) (privk a)))
+         (enc
+           (hash (enc k (pubk b)) (enc m k)
+             (enc (enc k (pubk b)) (enc m k) (privk a))) k))))
+    ((recv (enc m k)) (send (enc m k)))
+    ((recv (enc k (pubk b))) (send (enc k (pubk b)))))
+  (label 1)
+  (parent 0)
+  (unrealized (1 0))
+  (origs (k (0 0)))
+  (comment "1 in cohort - 1 not yet seen"))
+
+(defskeleton ns
+  (vars (m text) (a b name) (k skey))
+  (defstrand init 1 (m m) (a a) (b b) (k k))
+  (deflistener (enc m k))
+  (deflistener (enc k (pubk b)))
+  (precedes ((0 0) (1 0)) ((0 0) (2 0)))
+  (non-orig (privk a) (privk b))
+  (uniq-orig k)
+  (operation encryption-test (displaced 3 0 init 1) (enc m k) (1 0))
+  (traces
+    ((send
+       (cat (enc k (pubk b)) (enc m k)
+         (enc (enc k (pubk b)) (enc m k) (privk a))
+         (hash (enc k (pubk b)) (enc m k)
+           (enc (enc k (pubk b)) (enc m k) (privk a)))
+         (enc
+           (hash (enc k (pubk b)) (enc m k)
+             (enc (enc k (pubk b)) (enc m k) (privk a))) k))))
+    ((recv (enc m k)) (send (enc m k)))
+    ((recv (enc k (pubk b))) (send (enc k (pubk b)))))
+  (label 2)
+  (parent 1)
+  (unrealized)
+  (shape)
+  (maps ((0 1 2) ((a a) (b b) (m m) (k k))))
+  (origs (k (0 0))))
+
+(comment "Nothing left to do")
+
+(defprotocol ns basic
+  (defrole init
+    (vars (a b name) (m text) (k skey))
+    (trace
+      (send
+        (cat (enc k (pubk b)) (enc m k)
+          (enc (enc k (pubk b)) (enc m k) (privk a))
+          (hash (enc k (pubk b)) (enc m k)
+            (enc (enc k (pubk b)) (enc m k) (privk a)))
+          (enc
+            (hash (enc k (pubk b)) (enc m k)
+              (enc (enc k (pubk b)) (enc m k) (privk a))) k)))))
+  (defrole response
+    (vars (a b name) (m text) (k skey))
+    (trace
+      (recv
+        (cat (enc k (pubk b)) (enc m k)
+          (enc (enc k (pubk b)) (enc m k) (privk a))
+          (hash (enc k (pubk b)) (enc m k)
+            (enc (enc k (pubk b)) (enc m k) (privk a)))
+          (enc
+            (hash (enc k (pubk b)) (enc m k)
+              (enc (enc k (pubk b)) (enc m k) (privk a))) k))))))
+
+(defskeleton ns
+  (vars (m text) (a b name) (k skey))
+  (defstrand response 1 (m m) (a a) (b b) (k k))
+  (non-orig (privk a) (privk b))
+  (traces
+    ((recv
+       (cat (enc k (pubk b)) (enc m k)
+         (enc (enc k (pubk b)) (enc m k) (privk a))
+         (hash (enc k (pubk b)) (enc m k)
+           (enc (enc k (pubk b)) (enc m k) (privk a)))
+         (enc
+           (hash (enc k (pubk b)) (enc m k)
+             (enc (enc k (pubk b)) (enc m k) (privk a))) k)))))
+  (label 3)
+  (unrealized (0 0))
+  (origs)
+  (comment "1 in cohort - 1 not yet seen"))
+
+(defskeleton ns
+  (vars (m text) (a b name) (k skey))
+  (defstrand response 1 (m m) (a a) (b b) (k k))
+  (defstrand init 1 (m m) (a a) (b b) (k k))
+  (precedes ((1 0) (0 0)))
+  (non-orig (privk a) (privk b))
+  (operation encryption-test (added-strand init 1)
+    (enc (enc k (pubk b)) (enc m k) (privk a)) (0 0))
+  (traces
+    ((recv
+       (cat (enc k (pubk b)) (enc m k)
+         (enc (enc k (pubk b)) (enc m k) (privk a))
+         (hash (enc k (pubk b)) (enc m k)
+           (enc (enc k (pubk b)) (enc m k) (privk a)))
+         (enc
+           (hash (enc k (pubk b)) (enc m k)
+             (enc (enc k (pubk b)) (enc m k) (privk a))) k))))
+    ((send
+       (cat (enc k (pubk b)) (enc m k)
+         (enc (enc k (pubk b)) (enc m k) (privk a))
+         (hash (enc k (pubk b)) (enc m k)
+           (enc (enc k (pubk b)) (enc m k) (privk a)))
+         (enc
+           (hash (enc k (pubk b)) (enc m k)
+             (enc (enc k (pubk b)) (enc m k) (privk a))) k)))))
+  (label 4)
+  (parent 3)
+  (unrealized)
+  (shape)
+  (maps ((0) ((a a) (b b) (m m) (k k))))
+  (origs))
+
+(comment "Nothing left to do")
+
+(defprotocol ns basic
+  (defrole init
+    (vars (a b name) (m text) (k skey))
+    (trace
+      (send
+        (cat (enc k (pubk b)) (enc m k)
+          (enc (enc k (pubk b)) (enc m k) (privk a))
+          (hash (enc k (pubk b)) (enc m k)
+            (enc (enc k (pubk b)) (enc m k) (privk a)))
+          (enc
+            (hash (enc k (pubk b)) (enc m k)
+              (enc (enc k (pubk b)) (enc m k) (privk a))) k)))))
+  (defrole response
+    (vars (a b name) (m text) (k skey))
+    (trace
+      (recv
+        (cat (enc k (pubk b)) (enc m k)
+          (enc (enc k (pubk b)) (enc m k) (privk a))
+          (hash (enc k (pubk b)) (enc m k)
+            (enc (enc k (pubk b)) (enc m k) (privk a)))
+          (enc
+            (hash (enc k (pubk b)) (enc m k)
+              (enc (enc k (pubk b)) (enc m k) (privk a))) k))))))
+
+(defskeleton ns
+  (vars (m text) (a b a-0 name) (k k-0 skey))
+  (defstrand response 1 (m m) (a a-0) (b b) (k k-0))
+  (defstrand init 1 (m m) (a a) (b b) (k k))
+  (non-orig (privk a) (privk b))
+  (uniq-orig m k)
+  (traces
+    ((recv
+       (cat (enc k-0 (pubk b)) (enc m k-0)
+         (enc (enc k-0 (pubk b)) (enc m k-0) (privk a-0))
+         (hash (enc k-0 (pubk b)) (enc m k-0)
+           (enc (enc k-0 (pubk b)) (enc m k-0) (privk a-0)))
+         (enc
+           (hash (enc k-0 (pubk b)) (enc m k-0)
+             (enc (enc k-0 (pubk b)) (enc m k-0) (privk a-0))) k-0))))
+    ((send
+       (cat (enc k (pubk b)) (enc m k)
+         (enc (enc k (pubk b)) (enc m k) (privk a))
+         (hash (enc k (pubk b)) (enc m k)
+           (enc (enc k (pubk b)) (enc m k) (privk a)))
+         (enc
+           (hash (enc k (pubk b)) (enc m k)
+             (enc (enc k (pubk b)) (enc m k) (privk a))) k)))))
+  (label 5)
+  (unrealized (0 0))
+  (preskeleton)
+  (origs (m (1 0)) (k (1 0)))
+  (comment "Not a skeleton"))
+
+(defskeleton ns
+  (vars (m text) (a b a-0 name) (k k-0 skey))
+  (defstrand response 1 (m m) (a a-0) (b b) (k k-0))
+  (defstrand init 1 (m m) (a a) (b b) (k k))
+  (precedes ((1 0) (0 0)))
+  (non-orig (privk a) (privk b))
+  (uniq-orig m k)
+  (traces
+    ((recv
+       (cat (enc k-0 (pubk b)) (enc m k-0)
+         (enc (enc k-0 (pubk b)) (enc m k-0) (privk a-0))
+         (hash (enc k-0 (pubk b)) (enc m k-0)
+           (enc (enc k-0 (pubk b)) (enc m k-0) (privk a-0)))
+         (enc
+           (hash (enc k-0 (pubk b)) (enc m k-0)
+             (enc (enc k-0 (pubk b)) (enc m k-0) (privk a-0))) k-0))))
+    ((send
+       (cat (enc k (pubk b)) (enc m k)
+         (enc (enc k (pubk b)) (enc m k) (privk a))
+         (hash (enc k (pubk b)) (enc m k)
+           (enc (enc k (pubk b)) (enc m k) (privk a)))
+         (enc
+           (hash (enc k (pubk b)) (enc m k)
+             (enc (enc k (pubk b)) (enc m k) (privk a))) k)))))
+  (label 6)
+  (parent 5)
+  (unrealized (0 0))
+  (origs (m (1 0)) (k (1 0)))
+  (comment "2 in cohort - 2 not yet seen"))
+
+(defskeleton ns
+  (vars (m text) (a b name) (k skey))
+  (defstrand response 1 (m m) (a a) (b b) (k k))
+  (defstrand init 1 (m m) (a a) (b b) (k k))
+  (precedes ((1 0) (0 0)))
+  (non-orig (privk a) (privk b))
+  (uniq-orig m k)
+  (operation encryption-test (displaced 2 1 init 1)
+    (hash (enc k-0 (pubk b)) (enc m k-0)
+      (enc (enc k-0 (pubk b)) (enc m k-0) (privk a-0))) (0 0))
+  (traces
+    ((recv
+       (cat (enc k (pubk b)) (enc m k)
+         (enc (enc k (pubk b)) (enc m k) (privk a))
+         (hash (enc k (pubk b)) (enc m k)
+           (enc (enc k (pubk b)) (enc m k) (privk a)))
+         (enc
+           (hash (enc k (pubk b)) (enc m k)
+             (enc (enc k (pubk b)) (enc m k) (privk a))) k))))
+    ((send
+       (cat (enc k (pubk b)) (enc m k)
+         (enc (enc k (pubk b)) (enc m k) (privk a))
+         (hash (enc k (pubk b)) (enc m k)
+           (enc (enc k (pubk b)) (enc m k) (privk a)))
+         (enc
+           (hash (enc k (pubk b)) (enc m k)
+             (enc (enc k (pubk b)) (enc m k) (privk a))) k)))))
+  (label 7)
+  (parent 6)
+  (unrealized)
+  (shape)
+  (maps ((0 1) ((a a) (b b) (a-0 a) (m m) (k k) (k-0 k))))
+  (origs (m (1 0)) (k (1 0))))
+
+(defskeleton ns
+  (vars (m text) (a b a-0 name) (k k-0 skey))
+  (defstrand response 1 (m m) (a a-0) (b b) (k k-0))
+  (defstrand init 1 (m m) (a a) (b b) (k k))
+  (deflistener
+    (cat (enc k-0 (pubk b)) (enc m k-0)
+      (enc (enc k-0 (pubk b)) (enc m k-0) (privk a-0))))
+  (precedes ((1 0) (2 0)) ((2 1) (0 0)))
+  (non-orig (privk a) (privk b))
+  (uniq-orig m k)
+  (operation encryption-test
+    (added-listener
+      (cat (enc k-0 (pubk b)) (enc m k-0)
+        (enc (enc k-0 (pubk b)) (enc m k-0) (privk a-0))))
+    (hash (enc k-0 (pubk b)) (enc m k-0)
+      (enc (enc k-0 (pubk b)) (enc m k-0) (privk a-0))) (0 0))
+  (traces
+    ((recv
+       (cat (enc k-0 (pubk b)) (enc m k-0)
+         (enc (enc k-0 (pubk b)) (enc m k-0) (privk a-0))
+         (hash (enc k-0 (pubk b)) (enc m k-0)
+           (enc (enc k-0 (pubk b)) (enc m k-0) (privk a-0)))
+         (enc
+           (hash (enc k-0 (pubk b)) (enc m k-0)
+             (enc (enc k-0 (pubk b)) (enc m k-0) (privk a-0))) k-0))))
+    ((send
+       (cat (enc k (pubk b)) (enc m k)
+         (enc (enc k (pubk b)) (enc m k) (privk a))
+         (hash (enc k (pubk b)) (enc m k)
+           (enc (enc k (pubk b)) (enc m k) (privk a)))
+         (enc
+           (hash (enc k (pubk b)) (enc m k)
+             (enc (enc k (pubk b)) (enc m k) (privk a))) k))))
+    ((recv
+       (cat (enc k-0 (pubk b)) (enc m k-0)
+         (enc (enc k-0 (pubk b)) (enc m k-0) (privk a-0))))
+      (send
+        (cat (enc k-0 (pubk b)) (enc m k-0)
+          (enc (enc k-0 (pubk b)) (enc m k-0) (privk a-0))))))
+  (label 8)
+  (parent 6)
+  (unrealized (2 0))
+  (comment "2 in cohort - 2 not yet seen"))
+
+(defskeleton ns
+  (vars (m text) (a b a-0 name) (k skey))
+  (defstrand response 1 (m m) (a a-0) (b b) (k k))
+  (defstrand init 1 (m m) (a a) (b b) (k k))
+  (deflistener
+    (cat (enc k (pubk b)) (enc m k)
+      (enc (enc k (pubk b)) (enc m k) (privk a-0))))
+  (precedes ((1 0) (2 0)) ((2 1) (0 0)))
+  (non-orig (privk a) (privk b))
+  (uniq-orig m k)
+  (operation nonce-test (contracted (k-0 k)) m (2 0) (enc m k))
+  (traces
+    ((recv
+       (cat (enc k (pubk b)) (enc m k)
+         (enc (enc k (pubk b)) (enc m k) (privk a-0))
+         (hash (enc k (pubk b)) (enc m k)
+           (enc (enc k (pubk b)) (enc m k) (privk a-0)))
+         (enc
+           (hash (enc k (pubk b)) (enc m k)
+             (enc (enc k (pubk b)) (enc m k) (privk a-0))) k))))
+    ((send
+       (cat (enc k (pubk b)) (enc m k)
+         (enc (enc k (pubk b)) (enc m k) (privk a))
+         (hash (enc k (pubk b)) (enc m k)
+           (enc (enc k (pubk b)) (enc m k) (privk a)))
+         (enc
+           (hash (enc k (pubk b)) (enc m k)
+             (enc (enc k (pubk b)) (enc m k) (privk a))) k))))
+    ((recv
+       (cat (enc k (pubk b)) (enc m k)
+         (enc (enc k (pubk b)) (enc m k) (privk a-0))))
+      (send
+        (cat (enc k (pubk b)) (enc m k)
+          (enc (enc k (pubk b)) (enc m k) (privk a-0))))))
+  (label 9)
+  (parent 8)
+  (unrealized (0 0))
+  (comment "2 in cohort - 2 not yet seen"))
+
+(defskeleton ns
+  (vars (m text) (a b a-0 name) (k k-0 skey))
+  (defstrand response 1 (m m) (a a-0) (b b) (k k-0))
+  (defstrand init 1 (m m) (a a) (b b) (k k))
+  (deflistener
+    (cat (enc k-0 (pubk b)) (enc m k-0)
+      (enc (enc k-0 (pubk b)) (enc m k-0) (privk a-0))))
+  (deflistener k)
+  (precedes ((1 0) (3 0)) ((2 1) (0 0)) ((3 1) (2 0)))
+  (non-orig (privk a) (privk b))
+  (uniq-orig m k)
+  (operation nonce-test (added-listener k) m (2 0) (enc m k))
+  (traces
+    ((recv
+       (cat (enc k-0 (pubk b)) (enc m k-0)
+         (enc (enc k-0 (pubk b)) (enc m k-0) (privk a-0))
+         (hash (enc k-0 (pubk b)) (enc m k-0)
+           (enc (enc k-0 (pubk b)) (enc m k-0) (privk a-0)))
+         (enc
+           (hash (enc k-0 (pubk b)) (enc m k-0)
+             (enc (enc k-0 (pubk b)) (enc m k-0) (privk a-0))) k-0))))
+    ((send
+       (cat (enc k (pubk b)) (enc m k)
+         (enc (enc k (pubk b)) (enc m k) (privk a))
+         (hash (enc k (pubk b)) (enc m k)
+           (enc (enc k (pubk b)) (enc m k) (privk a)))
+         (enc
+           (hash (enc k (pubk b)) (enc m k)
+             (enc (enc k (pubk b)) (enc m k) (privk a))) k))))
+    ((recv
+       (cat (enc k-0 (pubk b)) (enc m k-0)
+         (enc (enc k-0 (pubk b)) (enc m k-0) (privk a-0))))
+      (send
+        (cat (enc k-0 (pubk b)) (enc m k-0)
+          (enc (enc k-0 (pubk b)) (enc m k-0) (privk a-0)))))
+    ((recv k) (send k)))
+  (label 10)
+  (parent 8)
+  (unrealized (3 0))
+  (dead)
+  (comment "empty cohort"))
+
+(defskeleton ns
+  (vars (m text) (a b name) (k skey))
+  (defstrand response 1 (m m) (a a) (b b) (k k))
+  (defstrand init 1 (m m) (a a) (b b) (k k))
+  (deflistener
+    (cat (enc k (pubk b)) (enc m k)
+      (enc (enc k (pubk b)) (enc m k) (privk a))))
+  (precedes ((1 0) (2 0)) ((2 1) (0 0)))
+  (non-orig (privk a) (privk b))
+  (uniq-orig m k)
+  (operation encryption-test (displaced 3 1 init 1)
+    (enc
+      (hash (enc k (pubk b)) (enc m k)
+        (enc (enc k (pubk b)) (enc m k) (privk a-0))) k) (0 0))
+  (traces
+    ((recv
+       (cat (enc k (pubk b)) (enc m k)
+         (enc (enc k (pubk b)) (enc m k) (privk a))
+         (hash (enc k (pubk b)) (enc m k)
+           (enc (enc k (pubk b)) (enc m k) (privk a)))
+         (enc
+           (hash (enc k (pubk b)) (enc m k)
+             (enc (enc k (pubk b)) (enc m k) (privk a))) k))))
+    ((send
+       (cat (enc k (pubk b)) (enc m k)
+         (enc (enc k (pubk b)) (enc m k) (privk a))
+         (hash (enc k (pubk b)) (enc m k)
+           (enc (enc k (pubk b)) (enc m k) (privk a)))
+         (enc
+           (hash (enc k (pubk b)) (enc m k)
+             (enc (enc k (pubk b)) (enc m k) (privk a))) k))))
+    ((recv
+       (cat (enc k (pubk b)) (enc m k)
+         (enc (enc k (pubk b)) (enc m k) (privk a))))
+      (send
+        (cat (enc k (pubk b)) (enc m k)
+          (enc (enc k (pubk b)) (enc m k) (privk a))))))
+  (label 11)
+  (parent 9)
+  (seen 7)
+  (unrealized)
+  (comment "1 in cohort - 0 not yet seen"))
+
+(defskeleton ns
+  (vars (m text) (a b a-0 name) (k skey))
+  (defstrand response 1 (m m) (a a-0) (b b) (k k))
+  (defstrand init 1 (m m) (a a) (b b) (k k))
+  (deflistener
+    (cat (enc k (pubk b)) (enc m k)
+      (enc (enc k (pubk b)) (enc m k) (privk a-0))))
+  (deflistener k)
+  (precedes ((1 0) (2 0)) ((1 0) (3 0)) ((2 1) (0 0)) ((3 1) (0 0)))
+  (non-orig (privk a) (privk b))
+  (uniq-orig m k)
+  (operation encryption-test (added-listener k)
+    (enc
+      (hash (enc k (pubk b)) (enc m k)
+        (enc (enc k (pubk b)) (enc m k) (privk a-0))) k) (0 0))
+  (traces
+    ((recv
+       (cat (enc k (pubk b)) (enc m k)
+         (enc (enc k (pubk b)) (enc m k) (privk a-0))
+         (hash (enc k (pubk b)) (enc m k)
+           (enc (enc k (pubk b)) (enc m k) (privk a-0)))
+         (enc
+           (hash (enc k (pubk b)) (enc m k)
+             (enc (enc k (pubk b)) (enc m k) (privk a-0))) k))))
+    ((send
+       (cat (enc k (pubk b)) (enc m k)
+         (enc (enc k (pubk b)) (enc m k) (privk a))
+         (hash (enc k (pubk b)) (enc m k)
+           (enc (enc k (pubk b)) (enc m k) (privk a)))
+         (enc
+           (hash (enc k (pubk b)) (enc m k)
+             (enc (enc k (pubk b)) (enc m k) (privk a))) k))))
+    ((recv
+       (cat (enc k (pubk b)) (enc m k)
+         (enc (enc k (pubk b)) (enc m k) (privk a-0))))
+      (send
+        (cat (enc k (pubk b)) (enc m k)
+          (enc (enc k (pubk b)) (enc m k) (privk a-0)))))
+    ((recv k) (send k)))
+  (label 12)
+  (parent 9)
+  (unrealized (3 0))
+  (dead)
+  (comment "empty cohort"))
+
+(comment "Nothing left to do")

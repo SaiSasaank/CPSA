@@ -1,0 +1,70 @@
+(herald "PAKE 2" (algebra diffie-hellman))
+
+(comment "CPSA 3.6.2")
+(comment "All input read from pake2.scm")
+
+(defprotocol pake2 diffie-hellman
+  (defrole init
+    (vars (P Q name) (m n1 data) (a rndx) (v base) (p skey))
+    (trace (send (enc (exp (gen) a) (hash n1 p))) (recv v)
+      (send
+        (enc m
+          (hash p P Q (enc (exp (gen) a) (hash n1 p)) v (exp v a)))))
+    (uniq-gen n1 a))
+  (defrole resp
+    (vars (d n2 data) (b rndx) (u base) (p skey))
+    (trace (recv u) (send (enc (exp (gen) b) (hash n2 p))) (recv d))
+    (uniq-gen n2 b)
+    (absent (b u))))
+
+(defskeleton pake2
+  (vars (m n1 data) (P Q name) (p skey) (v base) (a rndx))
+  (defstrand init 3 (m m) (n1 n1) (P P) (Q Q) (p p) (v v) (a a))
+  (deflistener p)
+  (pen-non-orig p)
+  (uniq-gen n1 a)
+  (uniq-orig m)
+  (traces
+    ((send (enc (exp (gen) a) (hash n1 p))) (recv v)
+      (send
+        (enc m
+          (hash p P Q (enc (exp (gen) a) (hash n1 p)) v (exp v a)))))
+    ((recv p) (send p)))
+  (label 0)
+  (unrealized (1 0))
+  (dead)
+  (origs (m (0 2)))
+  (comment "empty cohort"))
+
+(comment "Nothing left to do")
+
+(defprotocol pake2 diffie-hellman
+  (defrole init
+    (vars (P Q name) (m n1 data) (a rndx) (v base) (p skey))
+    (trace (send (enc (exp (gen) a) (hash n1 p))) (recv v)
+      (send
+        (enc m
+          (hash p P Q (enc (exp (gen) a) (hash n1 p)) v (exp v a)))))
+    (uniq-gen n1 a))
+  (defrole resp
+    (vars (d n2 data) (b rndx) (u base) (p skey))
+    (trace (recv u) (send (enc (exp (gen) b) (hash n2 p))) (recv d))
+    (uniq-gen n2 b)
+    (absent (b u))))
+
+(defskeleton pake2
+  (vars (d n2 data) (p skey) (u base) (b rndx))
+  (defstrand resp 3 (d d) (n2 n2) (p p) (u u) (b b))
+  (deflistener p)
+  (absent (b u))
+  (pen-non-orig p)
+  (uniq-gen n2 b)
+  (traces ((recv u) (send (enc (exp (gen) b) (hash n2 p))) (recv d))
+    ((recv p) (send p)))
+  (label 1)
+  (unrealized (1 0))
+  (dead)
+  (origs)
+  (comment "empty cohort"))
+
+(comment "Nothing left to do")

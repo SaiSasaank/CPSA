@@ -1,0 +1,173 @@
+<?xml version="1.0"?>
+<!-- CPSA 3.6.2 -->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+ <title>PAKE 2</title>
+ <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+ <style>
+  svg.diagram { border-width: 1px; border-style: solid }
+ </style>
+</head>
+<body>
+
+<pre>(herald &quot;PAKE 2&quot; (algebra diffie-hellman))
+(comment &quot;CPSA 3.6.2&quot;)
+(comment &quot;All input read from pake2.scm&quot;)</pre>
+
+<p id="top">Trees: <a href="#t0">0</a> <a href="#t1">1</a>.</p>
+
+<p id="t0">Tree <a href="#top">0</a>.</p>
+
+<div>
+ <svg
+  class='diagram' width='79.920pt' height='79.920pt'
+  xmlns='http://www.w3.org/2000/svg' version='1.1'
+  viewBox='0 0 79.920 79.920' font-size='12.000'>
+  <text
+   x='39.960' y='26.040' style='text-anchor: middle; fill: red;'
+   onclick='window.open(&quot;#k0&quot;, &quot;_self&quot;)'>0</text>
+  </svg></div>
+
+<pre>(defprotocol pake2 diffie-hellman
+  (defrole init
+    (vars (P Q name) (m n1 data) (a rndx) (v base) (p skey))
+    (trace (send (enc (exp (gen) a) (hash n1 p))) (recv v)
+      (send
+        (enc m
+          (hash p P Q (enc (exp (gen) a) (hash n1 p)) v (exp v a)))))
+    (uniq-gen n1 a))
+  (defrole resp
+    (vars (d n2 data) (b rndx) (u base) (p skey))
+    (trace (recv u) (send (enc (exp (gen) b) (hash n2 p))) (recv d))
+    (uniq-gen n2 b)
+    (absent (b u))))</pre>
+
+<p id="k0">Item <a href="#t0">0</a>.</p>
+
+<div>
+ <svg
+  class='diagram' width='179.880pt' height='304.920pt'
+  xmlns='http://www.w3.org/2000/svg' version='1.1'
+  viewBox='0 0 179.880 304.920' font-size='12.000'>
+  <defs>
+   <marker
+    id='arrow' orient='auto' markerWidth='5' markerHeight='10' refX='5'
+    refY='5'>
+    <path
+     d='M 0 0 5 5 0 10'
+     style='stroke-width: 2; fill: none; stroke: black;'/></marker>
+   </defs>
+  <line
+   x1='139.920' y1='114.960' x2='139.920' y2='189.960'
+   style='stroke-width: 0.960; stroke: gray;'/>
+  <line
+   x1='39.960' y1='114.960' x2='39.960' y2='264.960'
+   style='stroke-width: 0.960; stroke: gray;'/>
+  <g><title>p</title><circle cx='139.920' cy='189.960' r='6.000'/></g>
+  <g><title>p</title>
+   <circle style='fill: red;' cx='139.920' cy='114.960' r='6.000'/></g>
+  <g>
+   <title>(enc m (hash p P Q (enc (exp (gen) a) (hash n1 p)) v (exp v a)))</title>
+   <circle cx='39.960' cy='264.960' r='6.000'/></g>
+  <g><title>v</title>
+   <circle style='fill: blue;' cx='39.960' cy='189.960' r='6.000'/></g>
+  <g><title>(enc (exp (gen) a) (hash n1 p))</title>
+   <circle cx='39.960' cy='114.960' r='6.000'/></g>
+  <g><title>((m m) (n1 n1) (P P) (Q Q) (p p) (v v) (a a))</title>
+   <text x='39.960' y='77.460' style='text-anchor: middle;'>init</text>
+   </g>
+  <text
+   x='89.940' y='39.960' style='text-anchor: middle;'>pake2 0</text>
+  </svg></div>
+
+<pre>(defskeleton pake2
+  (vars (m n1 data) (P Q name) (p skey) (v base) (a rndx))
+  (defstrand init 3 (m m) (n1 n1) (P P) (Q Q) (p p) (v v) (a a))
+  (deflistener p)
+  (pen-non-orig p)
+  (uniq-gen n1 a)
+  (uniq-orig m)
+  (label 0)
+  (unrealized (1 0))
+  (dead)
+  (origs (m (0 2)))
+  (comment &quot;empty cohort&quot;))</pre>
+
+<p id="t1">Tree <a href="#top">1</a>.</p>
+
+<div>
+ <svg
+  class='diagram' width='79.920pt' height='79.920pt'
+  xmlns='http://www.w3.org/2000/svg' version='1.1'
+  viewBox='0 0 79.920 79.920' font-size='12.000'>
+  <text
+   x='39.960' y='26.040' style='text-anchor: middle; fill: red;'
+   onclick='window.open(&quot;#k1&quot;, &quot;_self&quot;)'>1</text>
+  </svg></div>
+
+<pre>(defprotocol pake2 diffie-hellman
+  (defrole init
+    (vars (P Q name) (m n1 data) (a rndx) (v base) (p skey))
+    (trace (send (enc (exp (gen) a) (hash n1 p))) (recv v)
+      (send
+        (enc m
+          (hash p P Q (enc (exp (gen) a) (hash n1 p)) v (exp v a)))))
+    (uniq-gen n1 a))
+  (defrole resp
+    (vars (d n2 data) (b rndx) (u base) (p skey))
+    (trace (recv u) (send (enc (exp (gen) b) (hash n2 p))) (recv d))
+    (uniq-gen n2 b)
+    (absent (b u))))</pre>
+
+<p id="k1">Item <a href="#t1">1</a>.</p>
+
+<div>
+ <svg
+  class='diagram' width='179.880pt' height='304.920pt'
+  xmlns='http://www.w3.org/2000/svg' version='1.1'
+  viewBox='0 0 179.880 304.920' font-size='12.000'>
+  <defs>
+   <marker
+    id='arrow' orient='auto' markerWidth='5' markerHeight='10' refX='5'
+    refY='5'>
+    <path
+     d='M 0 0 5 5 0 10'
+     style='stroke-width: 2; fill: none; stroke: black;'/></marker>
+   </defs>
+  <line
+   x1='139.920' y1='114.960' x2='139.920' y2='189.960'
+   style='stroke-width: 0.960; stroke: gray;'/>
+  <line
+   x1='39.960' y1='114.960' x2='39.960' y2='264.960'
+   style='stroke-width: 0.960; stroke: gray;'/>
+  <g><title>p</title><circle cx='139.920' cy='189.960' r='6.000'/></g>
+  <g><title>p</title>
+   <circle style='fill: red;' cx='139.920' cy='114.960' r='6.000'/></g>
+  <g><title>d</title>
+   <circle style='fill: blue;' cx='39.960' cy='264.960' r='6.000'/></g>
+  <g><title>(enc (exp (gen) b) (hash n2 p))</title>
+   <circle cx='39.960' cy='189.960' r='6.000'/></g>
+  <g><title>u</title>
+   <circle style='fill: blue;' cx='39.960' cy='114.960' r='6.000'/></g>
+  <g><title>((d d) (n2 n2) (p p) (u u) (b b))</title>
+   <text x='39.960' y='77.460' style='text-anchor: middle;'>resp</text>
+   </g>
+  <text
+   x='89.940' y='39.960' style='text-anchor: middle;'>pake2 1</text>
+  </svg></div>
+
+<pre>(defskeleton pake2
+  (vars (d n2 data) (p skey) (u base) (b rndx))
+  (defstrand resp 3 (d d) (n2 n2) (p p) (u u) (b b))
+  (deflistener p)
+  (absent (b u))
+  (pen-non-orig p)
+  (uniq-gen n2 b)
+  (label 1)
+  (unrealized (1 0))
+  (dead)
+  (origs)
+  (comment &quot;empty cohort&quot;))</pre>
+
+</body>
+</html>

@@ -1,0 +1,300 @@
+<?xml version="1.0"?>
+<!-- CPSA 3.6.2 -->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+ <title>PAKE 1</title>
+ <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+ <style>
+  svg.diagram { border-width: 1px; border-style: solid }
+ </style>
+</head>
+<body>
+
+<pre>(herald &quot;PAKE 1&quot; (algebra diffie-hellman))
+(comment &quot;CPSA 3.6.2&quot;)
+(comment &quot;All input read from pake1.scm&quot;)</pre>
+
+<p id="top">Trees: <a href="#t0">0</a> <a href="#t2">2</a>.</p>
+
+<p id="t0">Tree <a href="#top">0</a>.</p>
+
+<div>
+ <svg
+  class='diagram' width='129.840pt' height='79.920pt'
+  xmlns='http://www.w3.org/2000/svg' version='1.1'
+  viewBox='0 0 129.840 79.920' font-size='12.000'>
+  <text
+   x='89.880' y='26.040' style='text-anchor: middle; fill: red;'
+   onclick='window.open(&quot;#k1&quot;, &quot;_self&quot;)'>1</text>
+  <line
+   x1='39.960' y1='39.960' x2='89.880' y2='39.960'
+   style='stroke-width: 0.960; stroke: gray;'/>
+  <text
+   x='39.960' y='26.040' style='text-anchor: middle; fill: red;'
+   onclick='window.open(&quot;#k0&quot;, &quot;_self&quot;)'>0</text>
+  </svg></div>
+
+<pre>(defprotocol pake1 diffie-hellman
+  (defrole init
+    (vars (P Q name) (m data) (a rndx) (p skey) (v base))
+    (trace (send (exp (gen) a)) (recv v)
+      (send (enc m (hash p P Q (exp (gen) a) v (exp v a))))))
+  (defrole resp
+    (vars (d data) (b rndx) (u base))
+    (trace (recv u) (send (exp (gen) b)) (recv d))))</pre>
+
+<p id="k0">Item <a href="#t0">0</a>, Child: <a href="#k1">1</a>.</p>
+
+<div>
+ <svg
+  class='diagram' width='179.880pt' height='304.920pt'
+  xmlns='http://www.w3.org/2000/svg' version='1.1'
+  viewBox='0 0 179.880 304.920' font-size='12.000'>
+  <defs>
+   <marker
+    id='arrow' orient='auto' markerWidth='5' markerHeight='10' refX='5'
+    refY='5'>
+    <path
+     d='M 0 0 5 5 0 10'
+     style='stroke-width: 2; fill: none; stroke: black;'/></marker>
+   </defs>
+  <line
+   x1='139.920' y1='114.960' x2='139.920' y2='189.960'
+   style='stroke-width: 0.960; stroke: gray;'/>
+  <line
+   x1='39.960' y1='114.960' x2='39.960' y2='264.960'
+   style='stroke-width: 0.960; stroke: gray;'/>
+  <g><title>(hash p P Q (exp (gen) a) v (exp v a))</title>
+   <circle cx='139.920' cy='189.960' r='6.000'/></g>
+  <g><title>(hash p P Q (exp (gen) a) v (exp v a))</title>
+   <circle style='fill: red;' cx='139.920' cy='114.960' r='6.000'/></g>
+  <g><title>(enc m (hash p P Q (exp (gen) a) v (exp v a)))</title>
+   <circle cx='39.960' cy='264.960' r='6.000'/></g>
+  <g><title>v</title>
+   <circle style='fill: blue;' cx='39.960' cy='189.960' r='6.000'/></g>
+  <g><title>(exp (gen) a)</title>
+   <circle cx='39.960' cy='114.960' r='6.000'/></g>
+  <g><title>((m m) (P P) (Q Q) (p p) (v v) (a a))</title>
+   <text x='39.960' y='77.460' style='text-anchor: middle;'>init</text>
+   </g>
+  <text
+   x='89.940' y='39.960' style='text-anchor: middle;'>pake1 0</text>
+  </svg></div>
+
+<pre>(defskeleton pake1
+  (vars (m data) (P Q name) (p skey) (v base) (a rndx))
+  (defstrand init 3 (m m) (P P) (Q Q) (p p) (v v) (a a))
+  (deflistener (hash p P Q (exp (gen) a) v (exp v a)))
+  (pen-non-orig p)
+  (uniq-orig m)
+  (label 0)
+  (unrealized (1 0))
+  (origs (m (0 2)))
+  (comment &quot;1 in cohort - 1 not yet seen&quot;))</pre>
+
+<p id="k1">Item <a href="#t0">1</a>, Parent: <a href="#k0">0</a>.</p>
+
+<div>
+ <svg
+  class='diagram' width='279.840pt' height='304.920pt'
+  xmlns='http://www.w3.org/2000/svg' version='1.1'
+  viewBox='0 0 279.840 304.920' font-size='12.000'>
+  <defs>
+   <marker
+    id='arrow' orient='auto' markerWidth='5' markerHeight='10' refX='5'
+    refY='5'>
+    <path
+     d='M 0 0 5 5 0 10'
+     style='stroke-width: 2; fill: none; stroke: black;'/></marker>
+   </defs>
+  <line
+   x1='239.880' y1='114.960' x2='239.880' y2='189.960'
+   style='stroke-width: 0.960; stroke: gray;'/>
+  <line
+   x1='139.920' y1='189.960' x2='139.920' y2='264.960'
+   style='stroke-width: 0.960; stroke: gray;'/>
+  <line
+   x1='39.960' y1='114.960' x2='39.960' y2='264.960'
+   style='stroke-width: 0.960; stroke: gray;'/>
+  <path
+   d='M 239.880 189.960 Q 192.900 189.960 145.920 189.960'
+   style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
+  <g><title>(cat p P Q (exp (gen) a) v (exp v a))</title>
+   <circle cx='239.880' cy='189.960' r='6.000'/></g>
+  <g><title>(cat p P Q (exp (gen) a) v (exp v a))</title>
+   <circle style='fill: red;' cx='239.880' cy='114.960' r='6.000'/></g>
+  <g><title>(hash p P Q (exp (gen) a) v (exp v a))</title>
+   <circle cx='139.920' cy='264.960' r='6.000'/></g>
+  <g><title>(hash p P Q (exp (gen) a) v (exp v a))</title>
+   <circle style='fill: blue;' cx='139.920' cy='189.960' r='6.000'/></g>
+  <g><title>(enc m (hash p P Q (exp (gen) a) v (exp v a)))</title>
+   <circle cx='39.960' cy='264.960' r='6.000'/></g>
+  <g><title>v</title>
+   <circle style='fill: blue;' cx='39.960' cy='189.960' r='6.000'/></g>
+  <g><title>(exp (gen) a)</title>
+   <circle cx='39.960' cy='114.960' r='6.000'/></g>
+  <g><title>((m m) (P P) (Q Q) (p p) (v v) (a a))</title>
+   <text x='39.960' y='77.460' style='text-anchor: middle;'>init</text>
+   </g>
+  <text
+   x='139.920' y='39.960' style='text-anchor: middle;'>pake1 1</text>
+  </svg></div>
+
+<pre>(defskeleton pake1
+  (vars (m data) (P Q name) (p skey) (v base) (a rndx))
+  (defstrand init 3 (m m) (P P) (Q Q) (p p) (v v) (a a))
+  (deflistener (hash p P Q (exp (gen) a) v (exp v a)))
+  (deflistener (cat p P Q (exp (gen) a) v (exp v a)))
+  (precedes ((2 1) (1 0)))
+  (pen-non-orig p)
+  (uniq-orig m)
+  (operation encryption-test
+    (added-listener (cat p P Q (exp (gen) a) v (exp v a)))
+    (hash p P Q (exp (gen) a) v (exp v a)) (1 0))
+  (label 1)
+  (parent 0)
+  (unrealized (2 0))
+  (dead)
+  (comment &quot;empty cohort&quot;))</pre>
+
+<p id="t2">Tree <a href="#top">2</a>.</p>
+
+<div>
+ <svg
+  class='diagram' width='129.840pt' height='79.920pt'
+  xmlns='http://www.w3.org/2000/svg' version='1.1'
+  viewBox='0 0 129.840 79.920' font-size='12.000'>
+  <text
+   x='89.880' y='26.040' style='text-anchor: middle; fill: red;'
+   onclick='window.open(&quot;#k3&quot;, &quot;_self&quot;)'>3</text>
+  <line
+   x1='39.960' y1='39.960' x2='89.880' y2='39.960'
+   style='stroke-width: 0.960; stroke: gray;'/>
+  <text
+   x='39.960' y='26.040' style='text-anchor: middle; fill: red;'
+   onclick='window.open(&quot;#k2&quot;, &quot;_self&quot;)'>2</text>
+  </svg></div>
+
+<pre>(defprotocol pake1 diffie-hellman
+  (defrole init
+    (vars (P Q name) (m data) (a rndx) (p skey) (v base))
+    (trace (send (exp (gen) a)) (recv v)
+      (send (enc m (hash p P Q (exp (gen) a) v (exp v a))))))
+  (defrole resp
+    (vars (d data) (b rndx) (u base))
+    (trace (recv u) (send (exp (gen) b)) (recv d))))</pre>
+
+<p id="k2">Item <a href="#t2">2</a>, Child: <a href="#k3">3</a>.</p>
+
+<div>
+ <svg
+  class='diagram' width='179.880pt' height='304.920pt'
+  xmlns='http://www.w3.org/2000/svg' version='1.1'
+  viewBox='0 0 179.880 304.920' font-size='12.000'>
+  <defs>
+   <marker
+    id='arrow' orient='auto' markerWidth='5' markerHeight='10' refX='5'
+    refY='5'>
+    <path
+     d='M 0 0 5 5 0 10'
+     style='stroke-width: 2; fill: none; stroke: black;'/></marker>
+   </defs>
+  <line
+   x1='139.920' y1='114.960' x2='139.920' y2='189.960'
+   style='stroke-width: 0.960; stroke: gray;'/>
+  <line
+   x1='39.960' y1='114.960' x2='39.960' y2='264.960'
+   style='stroke-width: 0.960; stroke: gray;'/>
+  <g><title>(hash p P Q (exp (gen) a) v (exp v a))</title>
+   <circle cx='139.920' cy='189.960' r='6.000'/></g>
+  <g><title>(hash p P Q (exp (gen) a) v (exp v a))</title>
+   <circle style='fill: red;' cx='139.920' cy='114.960' r='6.000'/></g>
+  <g><title>d</title>
+   <circle style='fill: blue;' cx='39.960' cy='264.960' r='6.000'/></g>
+  <g><title>(exp (gen) b)</title>
+   <circle cx='39.960' cy='189.960' r='6.000'/></g>
+  <g><title>u</title>
+   <circle style='fill: blue;' cx='39.960' cy='114.960' r='6.000'/></g>
+  <g><title>((d d) (u u) (b b))</title>
+   <text x='39.960' y='77.460' style='text-anchor: middle;'>resp</text>
+   </g>
+  <text
+   x='89.940' y='39.960' style='text-anchor: middle;'>pake1 2</text>
+  </svg></div>
+
+<pre>(defskeleton pake1
+  (vars (d data) (P Q name) (p skey) (u v base) (a b rndx))
+  (defstrand resp 3 (d d) (u u) (b b))
+  (deflistener (hash p P Q (exp (gen) a) v (exp v a)))
+  (pen-non-orig p)
+  (label 2)
+  (unrealized (1 0))
+  (origs)
+  (comment &quot;1 in cohort - 1 not yet seen&quot;))</pre>
+
+<p id="k3">Item <a href="#t2">3</a>, Parent: <a href="#k2">2</a>.</p>
+
+<div>
+ <svg
+  class='diagram' width='279.840pt' height='304.920pt'
+  xmlns='http://www.w3.org/2000/svg' version='1.1'
+  viewBox='0 0 279.840 304.920' font-size='12.000'>
+  <defs>
+   <marker
+    id='arrow' orient='auto' markerWidth='5' markerHeight='10' refX='5'
+    refY='5'>
+    <path
+     d='M 0 0 5 5 0 10'
+     style='stroke-width: 2; fill: none; stroke: black;'/></marker>
+   </defs>
+  <line
+   x1='239.880' y1='114.960' x2='239.880' y2='189.960'
+   style='stroke-width: 0.960; stroke: gray;'/>
+  <line
+   x1='139.920' y1='189.960' x2='139.920' y2='264.960'
+   style='stroke-width: 0.960; stroke: gray;'/>
+  <line
+   x1='39.960' y1='114.960' x2='39.960' y2='264.960'
+   style='stroke-width: 0.960; stroke: gray;'/>
+  <path
+   d='M 239.880 189.960 Q 192.900 189.960 145.920 189.960'
+   style='stroke-dasharray: 6.000,2.400; stroke-width: 0.960; stroke: black; marker-end: url(#arrow); fill: none;'/>
+  <g><title>(cat p P Q (exp (gen) a) v (exp v a))</title>
+   <circle cx='239.880' cy='189.960' r='6.000'/></g>
+  <g><title>(cat p P Q (exp (gen) a) v (exp v a))</title>
+   <circle style='fill: red;' cx='239.880' cy='114.960' r='6.000'/></g>
+  <g><title>(hash p P Q (exp (gen) a) v (exp v a))</title>
+   <circle cx='139.920' cy='264.960' r='6.000'/></g>
+  <g><title>(hash p P Q (exp (gen) a) v (exp v a))</title>
+   <circle style='fill: blue;' cx='139.920' cy='189.960' r='6.000'/></g>
+  <g><title>d</title>
+   <circle style='fill: blue;' cx='39.960' cy='264.960' r='6.000'/></g>
+  <g><title>(exp (gen) b)</title>
+   <circle cx='39.960' cy='189.960' r='6.000'/></g>
+  <g><title>u</title>
+   <circle style='fill: blue;' cx='39.960' cy='114.960' r='6.000'/></g>
+  <g><title>((d d) (u u) (b b))</title>
+   <text x='39.960' y='77.460' style='text-anchor: middle;'>resp</text>
+   </g>
+  <text
+   x='139.920' y='39.960' style='text-anchor: middle;'>pake1 3</text>
+  </svg></div>
+
+<pre>(defskeleton pake1
+  (vars (d data) (P Q name) (p skey) (u v base) (a b rndx))
+  (defstrand resp 3 (d d) (u u) (b b))
+  (deflistener (hash p P Q (exp (gen) a) v (exp v a)))
+  (deflistener (cat p P Q (exp (gen) a) v (exp v a)))
+  (precedes ((2 1) (1 0)))
+  (pen-non-orig p)
+  (operation encryption-test
+    (added-listener (cat p P Q (exp (gen) a) v (exp v a)))
+    (hash p P Q (exp (gen) a) v (exp v a)) (1 0))
+  (label 3)
+  (parent 2)
+  (unrealized (2 0))
+  (dead)
+  (comment &quot;empty cohort&quot;))</pre>
+
+</body>
+</html>
